@@ -77,8 +77,20 @@ protected:
 class LogFormatter{
 public:
     typedef std::shared_ptr<LogFormatter> ptr;
+    LogFormatter(const std::string& pattern);
     std::string format(LogEvent::ptr event);
 private:
+    class FormatItem{
+    public:
+        typedef std::shared_ptr<LogFormatter> ptr;
+        virtual ~FormatItem();
+        virtual void format(std::ostream& os,LogEvent::ptr event)=0;
+    };
+    void init();
+
+private:
+    std::string m_pattern;
+    std::vector<FormatItem::ptr> m_items;
 
 };
 
