@@ -36,7 +36,7 @@ private:
 };
 
 // 日志器
-{
+class Logger{
 public:
     typedef std::shared_ptr<LogEvent> ptr;
     Logger(const std::string& name = "root"){};
@@ -58,7 +58,7 @@ private:
     std::list<LogAppender::ptr> m_appenders; // Appender集合，输出地集合
 };
 
-// 日志输出地
+// 日志输出器
 // 基类
 class LogAppender{
 public:
@@ -70,6 +70,7 @@ public:
 
 protected:
     LogLevel::Level m_level;
+    //日志事件先经过LogFormatter格式化后再输出到对应的输出地
     LogFormatter::ptr m_formater;
 };
 
@@ -77,7 +78,9 @@ protected:
 class LogFormatter{
 public:
     typedef std::shared_ptr<LogFormatter> ptr;
+    // pattern表示如何进行格式化
     LogFormatter(const std::string& pattern);
+    // 将日志事件格式化成字符串
     std::string format(LogEvent::ptr event);
 private:
     class FormatItem{
